@@ -1,2 +1,2 @@
 # Projects
-All projects will be ş
+All projects will be 
