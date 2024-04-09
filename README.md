@@ -1,2 +1,2 @@
 # Projects
-All projects will be 
+All projects will be...
