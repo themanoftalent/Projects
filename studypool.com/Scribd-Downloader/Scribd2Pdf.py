@@ -33,13 +33,13 @@ driver = webdriver.Chrome(options=options)
 driver.get(url)
 
 try:
-    driver.implicitly_wait(5) 
+    driver.implicitly_wait(1) 
     
     # Finding total number of pages
     total_pages_element = driver.find_element(By.CLASS_NAME, "page_of")
     #print(total_pages_element)
 
-    # Geting integer
+    # Getting integer
     total_pages = int(total_pages_element.text.split()[1])
 
     # Finding fullscreen button
@@ -62,19 +62,8 @@ try:
     pages = []
 
     driver.execute_script("window.scrollBy(0, -100);")
-    time.sleep(2)
+    time.sleep(.1)
 
-    # Finding first page's coordinates
-    page = driver.find_element(By.XPATH, "//div[@id='outer_page_1']")
-    page_left = 162 # page.location['x']
-    page_top = 86 # page.location['y'] 
-    page_right = page_left + page.size['width']
-    page_bottom = page_top + page.size['height']
-    #print("Cors")
-    #print(page_left)
-    #print(page_top)
-    #print(page_right)
-    #print(page_bottom)
     
     for current in range(1, total_pages + 1):
         # Finding pages by id
@@ -85,15 +74,17 @@ try:
         time.sleep(.1)
 
         # Capturing screenshot
-        screenshot = driver.get_screenshot_as_png()
-        screenshot_bytes = BytesIO(screenshot)
+        page_screenshot = page.screenshot_as_png
+        screenshot_bytes = BytesIO(page_screenshot)
         screenshot_image = Image.open(screenshot_bytes)
 
         # Saving screenshot
         # screenshot_image.save(f"screenshot_page_{current}.png")
 
         # Croping the screenshot to get the page only
-        page_image = screenshot_image.crop((page_left, page_top, page_right, page_bottom))
+        w, h = screenshot_image.size
+        cropping_box = (0, 0, w - 1, h)
+        page_image = screenshot_image.crop(cropping_box)
 
         # Saving cropped screenshot
         # page_image.save(f"cropped_page_{current}.png")
@@ -114,3 +105,4 @@ finally:
     filename = 'Result.pdf'
     with open(filename, 'wb') as file:
         file.write(pdf_bytes)
+    print("File Saved")
