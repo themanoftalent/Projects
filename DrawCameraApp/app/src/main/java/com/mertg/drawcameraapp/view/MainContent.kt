@@ -1,9 +1,7 @@
 package com.mertg.drawcameraapp.view
 
-import android.widget.Toast
 import com.mertg.drawcameraapp.viewmodel.MainViewModel
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mertg.drawcameraapp.util.getCurrentContext
 import com.mertg.drawcameraapp.viewmodel.CameraViewViewModel

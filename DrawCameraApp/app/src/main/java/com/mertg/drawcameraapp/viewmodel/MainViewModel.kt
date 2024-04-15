@@ -1,11 +1,13 @@
 package com.mertg.drawcameraapp.viewmodel
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
-import android.widget.Toast
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.mertg.drawcameraapp.MainActivity
 import com.mertg.drawcameraapp.R
 import com.mertg.drawcameraapp.util.getCurrentContext
 import java.io.File
@@ -30,6 +32,18 @@ class MainViewModel : ViewModel() {
     fun goCameraScreen(){
         showPhoto.value = false
         showCamera.value = true
+    }
+
+    fun goCameraScreenWithBack(context : Context){
+        showPhoto.value = false
+        showCamera.value = true
+
+        val intent = Intent(context,MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        context.startActivity(intent)
+        if(context is  Activity){
+            context.finish()
+        }
     }
 
     fun handleImageCapture(uri: Uri) {
