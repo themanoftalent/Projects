@@ -1,42 +1,48 @@
 # Slideshare Downloader
 
-**Slideshare Downloader** is a web application that allows users to download PowerPoint presentations from Slideshare.net. The application is built with Laravel, and Livewire to provide a seamless and interactive user experience.
+**Slideshare Downloader** is a web application that allows users to download PowerPoint presentations from Slideshare.net. The application is built with Laravel and Livewire to provide a seamless and interactive user experience.
 
 ## Demo
 
-the demo of this application at: [https://slideshare.maviism.com](https://slideshare.maviism.com)
+You can access the demo of this application at: [https://slideshare.maviism.com](https://slideshare.maviism.com)
 
 ## Project Repository
 
-https://github.com/maviism/slideshare-downloader
+The project repository is available on GitHub: [Slideshare Downloader Repository](https://github.com/maviism/slideshare-downloader)
 
-**sorry if i'm not put repository here. that can be easy for me if is there any changes 
+## Stack
 
-## Lesson Learned
+- [PHP](https://www.php.net/) require version 8.2^
+- [Laravel 11](https://laravel.com/)
+- [Livewire 3](https://livewire.laravel.com/)
 
-* i tried using vanilla javasript with fetch() function  (clientside)
+### Lesson Learned
 
-    * there is cors issues when fetch slideshare link
-    * when use cors mode 
-    "Redirect has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header' "
-    * when use no-cors mode return blank
-    When you use mode: 'no-cors' in a fetch request, you may encounter limitations in the data you can access. This mode can be used to avoid CORS errors, but it restricts your ability to inspect the response headers or access the response body. (ChatGPT)
+#### Using Vanilla JavaScript with Fetch() Function (Client-Side)
 
-    there's solution to handle
-    1. Server-Side Request(i choose this approach)
-    2. Use a Public API or Create own(have seen this way https://github.com/Rob--W/cors-anywhere)
-    3. Allow CORS on the Server(cannot be implement cause im not slideshare owner XD)
+- Encountered CORS issues when fetching Slideshare links:
+  - When using CORS mode: "Redirect has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header."
+  - When using 'no-cors' mode: Returned blank.
+- Solutions considered:
+  1. Server-Side Request (Chosen approach)
+  2. Using a Public API or Creating own (Explored alternative methods like https://github.com/Rob--W/cors-anywhere)
+  3. Allowing CORS on the Server (Not feasible as I am not the Slideshare owner)
 
-* choosing php cause have familiar with laravel framework
-    * stuck when scrape img src data cause have img lazyloader behaviour(my assumsi) just return first img src and another base64 data
-    * looking Repo Fevzi for references (thanks to you)
-    * get cdn image link and increment filename for images url
-    * learn to use PHPPresentation
+#### Choosing PHP Due to Familiarity with Laravel Framework
 
-    * issue
-        * if there is pattern change in cdn link or html tree there will be an issue
+- Faced challenges when scraping image src data due to lazy loader behavior.
+- Referenced Fevzi repository for guidance and appreciation(thank to you).
+- Obtained CDN image links and incremented filename for image URLs.
+- Learned to use PHPPresentation package.
+- Potential issues:
+  - Any pattern change in CDN image links or HTML tree may require reconfiguration.
 
-* deploy in shared hosting(have do this before, there is no problem)
+#### Deployment on Shared Hosting
 
+Deployed the application on shared hosting without encountering any issues.
 
-  
+## Created by
+
+Muadz Izhharul Haq
+201502208
+
