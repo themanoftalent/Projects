@@ -2,6 +2,7 @@ package com.mertg.drawcameraapp.view
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
 import com.mertg.drawcameraapp.model.Line
+import com.mertg.drawcameraapp.util.getCurrentContext
 import com.mertg.drawcameraapp.util.getScreenWidthPX
 import com.mertg.drawcameraapp.util.photoWidthAndHeightForDisplay
 import com.mertg.drawcameraapp.viewmodel.CameraViewViewModel
@@ -44,7 +46,7 @@ import com.mertg.drawcameraapp.viewmodel.MainViewModel
 @Composable
 fun DrawingScreen() {
 
-    val context = LocalContext.current
+    val context = getCurrentContext()
 
     val mainViewModel: MainViewModel = viewModel()
     val drawingScreenViewModel : DrawingScreenViewModel = viewModel()
@@ -76,13 +78,15 @@ fun DrawingScreen() {
             horizontalArrangement = Arrangement.Start)
         {
             Column(
-                modifier = Modifier.fillMaxSize().weight(1f),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.Start
             ){
                 IconButton(
                     onClick = {
-                        mainViewModel.goCameraScreen()
+                        mainViewModel.goCameraScreenWithBack(context)
                     },
                     modifier = Modifier.padding(3.dp)
                 ) {
@@ -90,7 +94,9 @@ fun DrawingScreen() {
                 }
             }
             Column(
-                modifier = Modifier.fillMaxSize().weight(1f),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.End
             ){

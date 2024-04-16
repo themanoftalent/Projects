@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlipCameraAndroid
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -76,6 +77,7 @@ fun CameraView(
             imageCapture
         )
         preview.setSurfaceProvider(previewView.surfaceProvider)
+
     }
     Column(Modifier.fillMaxSize()){
         Row(modifier = Modifier
@@ -90,7 +92,7 @@ fun CameraView(
                 },
                 modifier = Modifier.padding(3.dp)
             ) {
-                Icon(Icons.Filled.ArrowBackIosNew, "Geri")
+                Icon(Icons.Filled.Close, "Geri")
             }
         }
 
