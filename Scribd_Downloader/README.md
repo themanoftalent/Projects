@@ -24,6 +24,14 @@ python ScribdDownloader.py https://www.scribd.com/document/90403141/Social-Media
 
 ## Latest Changes
 
+### Most Recent
+
+- Added support to all types of URLs with specific pattern defined in a regular expression.
+- Adjusted dimensions of the cropping box.
+- Improved some console logs.
+
+### Older
+
 - Refactored The code into a more structured format.
 - Created a class called ScribdDownloader.
 - Moved the old functions into the ScribdDownloader class as methods.

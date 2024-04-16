@@ -23,18 +23,18 @@ class ScribdDownloader:
 
     # Validating URLs
     def is_valid_url(self, url):
-        return url.startswith("https://www.scribd.com/document/")
+        return bool(re.match(r'^https://www\.scribd\.com/.*/\d+/.*', url))
 
     # Extracting document name from URL
     def extract_document_name(self, url):
-        match = re.search(r'/document/\d+/(.*)$', url)
+        match = re.search(r'/.*/\d+/(.*)$', url)
         document_name = match.group(1)
         return document_name.strip()
 
     def capture_document(self, url):
         # Checking if URL is valid
         if not self.is_valid_url(url):
-            print("Please enter a valid Scribd document URL: https://www.scribd.com/document/...")
+            print("Please enter a valid Scribd document URL: https://www.scribd.com/...")
             sys.exit(1)
 
         document_name = self.extract_document_name(url)
@@ -92,7 +92,7 @@ class ScribdDownloader:
 
                 # Croping the screenshot to get the page only
                 w, h = screenshot_image.size
-                cropping_box = (0, 0, w - 1, h - 1)
+                cropping_box = (0, 0, w - 4, h - 2)
                 page_image = screenshot_image.crop(cropping_box)
 
                 # Converting the page to RGB so img2pdf doesn't cry about existing alpha channels every time
@@ -110,7 +110,7 @@ class ScribdDownloader:
             filename = f'{document_name}.pdf'
             with open(filename, 'wb') as file:
                 file.write(pdf_bytes)
-            print("File Saved.")
+            print(f"File Saved as {document_name}.pdf")
 
         finally:
             # Exit Chrome
