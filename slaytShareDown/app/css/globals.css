@@ -1,0 +1,75 @@
+@import url(theme.css);
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+*:focus-visible {
+  outline: none;
+}
+
+html {
+  _overflow: hidden;
+  height: 100%;
+}
+
+body {
+  _height: 100%;
+  overflow: auto;
+
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface);
+
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Product Sans", "Google Sans", Roboto, Oxygen, Ubuntu, Cantarell,
+    "Open Sans", "Helvetica Neue", sans-serif;
+  font-size: 16px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0;
+
+  width: 100%;
+  min-height: 100vh;
+}
+
+.main {
+  width: 100%;
+  max-width: 1200px;
+  padding-bottom: 0;
+}
+
+.footer_wrapper {
+  width: 100%;
+  background: var(--color-surface-container);
+  color: var(--color-on-surface);
+  font-size: 14px;
+  margin-top: 80px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  padding: 32px 16px;
+  gap: 16px;
+
+  max-width: 1200px;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.disclaimer {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--color-on-surface-variant);
+}
