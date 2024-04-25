@@ -1,0 +1,3 @@
+[submodule "slideshare-downloader"]
+	path = slideshare-downloader
+	url = https://github.com/sirridemirtas/slideshare-downloader
