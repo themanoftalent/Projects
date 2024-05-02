@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><!DOCTYPE html>
+    <html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Final Grade Calculator</title>
+    <style>
+        body {
+            background-color: #f0f8ff; 
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0; 
+            padding: 0; 
+        }
+        .container {
+            display: flex;
+            flex-direction: column; 
+            align-items: center; 
+            margin-top: 50px;
+        }
+        .box {
+            width: 300px; 
+            padding: 20px;
+            margin-bottom: 20px; 
+            border: 1px solid #ccc;
+            background-color: #fff; 
+            border-radius: 5px; 
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: center; 
+            padding: 10px; 
+            border-radius: 5px;
+            background-color: #afa3a3; 
+        }
+        .button-container {
+            display: flex;
+            justify-content: center; 
+            margin-top: 20px;
+        }
+        .button-container button {
+            margin: 0 10px; 
+            padding: 10px 20px; 
+            background-color: red; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            cursor: pointer;
+            transition: background-color 0.3s; 
+        }
+        .button-container button:hover {
+            background-color: darkred; 
+        }
+        h1 {
+            text-align: center;
+            margin-top: 20px; 
+        }
+    </style>
+    </head>
+    <body>
+    <h1>Final Grade Calculator</h1>
+    <div class="container">
+        <div class="box">
+            <label for="midterm">Midterm Grade (100):</label>
+            <input type="number" id="midterm" min="0" max="100" required>
+        </div>
+        <div class="box">
+            <label for="homework">Homework Grade (100):</label>
+            <input type="number" id="homework" min="0" max="100" required>
+        </div>
+        <div class="box">
+            <label for="attendance">Attendance Dates:</label>
+            <input type="text" id="attendance" placeholder="Enter absence dates" required>
+        </div>
+        <div class="box">
+            <label for="midterm_weight">Midterm Weight (%):</label>
+            <select id="midterm_weight" required>
+                <option value="0.2">20%</option>
+                <option value="0.3">30%</option>
+            </select>
+        </div>
+        <div class="box">
+            <label for="homework_weight">Homework Weight (%):</label>
+            <select id="homework_weight" required>
+                <option value="0.1">10%</option>
+                <option value="0.2">20%</option>
+                <option value="0.3">30%</option>
+            </select>
+        </div>
+        <div class="button-container">
+            <button onclick="calculateAndDisplay()">Calculate</button>
+            <button onclick="resetValues()">Reset</button>
+        </div>
+    </div>
+    <div class="result" id="result">Enter values and click calculate button.</div>
+    
+    <script>
+        
+    function calculateMinimumFinal(midterm, midtermWeight, homework, homeworkWeight, attendanceCount) {
+        var requiredFinal = Math.ceil((50 - (midterm * midtermWeight + homework * homeworkWeight)) / 0.6);
+        var averageGrade = (midterm * midtermWeight + homework * homeworkWeight);
+        
+        if (attendanceCount >= 5) {
+            return "Failed the course";
+        } else if (averageGrade < 50 || requiredFinal < 50) {
+            return "You need to score at least " + requiredFinal + " on the final to achieve a passing average of 50.";
+        } else {
+            return "You need to score at least 50 on the final exam.";
+        }
+    }
+    
+    function resetValues() {
+        document.getElementById('midterm').value = "";
+        document.getElementById('homework').value = "";
+        document.getElementById('attendance').value = "";
+        document.getElementById('midterm_weight').value = "0.2";
+        document.getElementById('homework_weight').value = "0.2";
+        document.getElementById('result').innerText = "Enter values and click Calculate.";
+    }
+    
+
+    function calculateAndDisplay() {
+        var midtermGrade = parseFloat(document.getElementById('midterm').value);
+        var midtermWeight = parseFloat(document.getElementById('midterm_weight').value);
+        var homeworkGrade = parseFloat(document.getElementById('homework').value);
+        var homeworkWeight = parseFloat(document.getElementById('homework_weight').value);
+        var attendanceCount = parseInt(document.getElementById('attendance').value);
+    
+        if (isNaN(midtermGrade) || isNaN(homeworkGrade) || isNaN(attendanceCount) || isNaN(midtermWeight) || isNaN(homeworkWeight)) {
+            document.getElementById('result').innerText = "Please enter values in all boxes.";
+            return;
+        }
+    
+        var result = calculateMinimumFinal(midtermGrade, midtermWeight, homeworkGrade, homeworkWeight, attendanceCount);
+        document.getElementById('result').innerText = result;
+    }
+    </script>
+    </body>
+    </html>
+    
