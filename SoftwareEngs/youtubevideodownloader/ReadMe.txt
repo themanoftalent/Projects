@@ -1,1 +1,0 @@
-This project was made in cooperation with Emre Baş , Fatih Emre Bakal and Ömer Faruk Satılmış.
