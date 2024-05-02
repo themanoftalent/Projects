@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+body{    
+  background-image: url(./image/blue.jpg);
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+h1{
+    padding-top: 30px;
+    text-align: center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+.container1{
+    width: 60%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.container2{
+    width: 60%;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+.Task{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgb(184, 184, 184);
+    border-radius: 30px;
+}
+input{
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 10px;
+  font-size: 25px;
+}
+button{
+    border: none;
+    outline: none;
+    background-color: rgb(97, 97, 222);
+    font-size: 25px;
+    padding: 16px 50px;
+    cursor: pointer;
+    border-radius: 40px;
+}
+button:hover {
+    background-color: #d32f2f;
+  }
+ul li{
+    list-style: none;
+    font-size: 20px;
+    cursor: pointer;
+    user-select: none;
+    padding: 12px 8px 12px 40px;
+    position: relative;
+}
+ul li::before{
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    background-image: url(image/uncheck.png);
+    background-size: cover;
+    background-position: center;
+    top: 10px;
+    left: 4px;
+    
+}
+ul li.check{
+    color: #555;
+    text-decoration: line-through;
+}
+ul li.check::before{
+    background-image: url(image/checked.jpg);
+}
+.remove-btn {
+    float: right;
+    border: none;
+    outline: none;
+    background-color: rgb(97, 97, 222);
+    font-size: 30px;
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    height: 45px; 
+    width: 75px; 
+    line-height: 50px; 
+    margin-top: -10px; 
+    
+}
+
+.remove-btn:hover {
+    background-color: #d32f2f;
+  
+}
