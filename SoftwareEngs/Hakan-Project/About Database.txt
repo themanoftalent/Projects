@@ -1,0 +1,18 @@
+			Hakan Yavaş 201504034
+
+Teacher, I couldn't create a normal database. That's why there is no sign in and sign up section.
+I was able to save and view locally, but i wasn't delete the data. I had a problem with 
+my Remove button. I tried to fix it but it didn't work, so I made the application work properly.
+I wrote the codes that I ran in the local database but had to delete because they weren't efficient.
+
+function saveData(){
+    localStorage.setItem("data",TaskList.innerHTML)
+}
+function showTask(){
+    TaskList.innerHTML = localStorage.getItem("data");
+}
+showTask();
+function clearData() {
+    localStorage.removeItem("data");
+}
+clearData();
