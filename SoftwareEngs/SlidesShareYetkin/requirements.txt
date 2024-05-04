@@ -1,0 +1,4 @@
+pysimplegui==4.60.5
+requests
+pillow
+beautifulsoup4
