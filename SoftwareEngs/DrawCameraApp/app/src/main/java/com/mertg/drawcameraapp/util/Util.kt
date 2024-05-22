@@ -5,14 +5,21 @@ import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.media.ExifInterface
 import android.net.Uri
-import androidx.compose.runtime.Composable
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 
-
+// Util
 fun rotateImageIfRequired(context: Context, bitmap: Bitmap, uri: Uri): Bitmap {
     val inputStream = context.contentResolver.openInputStream(uri)
     val ei = ExifInterface(inputStream!!)
@@ -107,6 +114,9 @@ fun photoWidthAndHeightForDisplayWithPadding(photoRatioWidth : Int, photoRatioHe
 
     return Pair(photoWidthForDisplayDP,photoHeightForDisplayDP)
 }
+
+
+
 
 
 /*

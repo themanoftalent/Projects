@@ -1,8 +1,6 @@
 package com.mertg.drawcameraapp
 
-import com.mertg.drawcameraapp.viewmodel.MainViewModel
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -12,18 +10,21 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.mertg.drawcameraapp.util.getCurrentContext
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.mertg.drawcameraapp.view.MainContent
-import com.mertg.drawcameraapp.viewmodel.CameraViewViewModel
+import com.mertg.drawcameraapp.viewmodel.MainViewModel
+import java.io.File
 
 class MainActivity : ComponentActivity() {
-
 
     private val viewModel by viewModels<MainViewModel>()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
-    ){ isGranted ->
+    ) { isGranted ->
         if (isGranted) {
             viewModel.initializeCamera()
         }
@@ -31,6 +32,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Tam ekran modunu etkinleştirmek
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        val windowInsetsController = WindowInsetsControllerCompat(window, window.decorView)
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
         setContent {
             MainContent()
         }
@@ -39,6 +47,25 @@ class MainActivity : ComponentActivity() {
         viewModel.getDirectoryFile(applicationContext)
         viewModel.initializeCameraExecutor()
 
+        // Geri tuşunu devre dışı bırakmak
+        onBackPressedDispatcher.addCallback(this) {
+            // Hiçbir şey yapma
+        }
+
+        // Geçici dosyaları sil
+        deleteTemporaryFiles()
+    }
+
+    private fun deleteTemporaryFiles() {
+        // Geçici dosyaların saklandığı klasör yolu
+        val tempFilesDirectory = File(getExternalFilesDir(null), "TempImages")
+        if (tempFilesDirectory.exists()) {
+            tempFilesDirectory.listFiles()?.forEach { file ->
+                if (file.name.startsWith("temp_")) {  // Geçici dosyaların adı 'temp_' ile başlıyorsa
+                    file.delete()
+                }
+            }
+        }
     }
 
     private fun requestCameraPermission() {
@@ -59,8 +86,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-
-
-
-

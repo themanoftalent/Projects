@@ -2,165 +2,154 @@ package com.mertg.drawcameraapp.view
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.SubdirectoryArrowLeft
-import androidx.compose.material.icons.filled.SubdirectoryArrowRight
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberImagePainter
+import com.mertg.drawcameraapp.R
 import com.mertg.drawcameraapp.model.Line
 import com.mertg.drawcameraapp.util.getCurrentContext
 import com.mertg.drawcameraapp.util.getScreenWidthPX
 import com.mertg.drawcameraapp.util.photoWidthAndHeightForDisplay
 import com.mertg.drawcameraapp.viewmodel.CameraViewViewModel
+import com.mertg.drawcameraapp.viewmodel.DrawingMode
 import com.mertg.drawcameraapp.viewmodel.DrawingScreenViewModel
 import com.mertg.drawcameraapp.viewmodel.MainViewModel
+import kotlin.math.hypot
 
 @Composable
 fun DrawingScreen() {
-
     val context = getCurrentContext()
-
     val mainViewModel: MainViewModel = viewModel()
-    val drawingScreenViewModel : DrawingScreenViewModel = viewModel()
-
-    val cameraViewViewModel : CameraViewViewModel = viewModel()
+    val drawingScreenViewModel: DrawingScreenViewModel = viewModel()
+    val cameraViewViewModel: CameraViewViewModel = viewModel()
 
     val lines = drawingScreenViewModel.lines
-    val undoStack = drawingScreenViewModel.undoStack
-    val redoStack = drawingScreenViewModel.redoStack
-
-    // real image width and height , like 3000 to 4000
-    val (imageWidthToAspectRatio, imageHeightToAspectRatio) = drawingScreenViewModel.getBitmapSizeFromUri(context,mainViewModel.photoUri)
-
-    // send these width and height to make ratio clear, if 9000 16000 returns -> 9:16, 3000 4000 returns->3:4
-    val (photoWidthForDisplay,photoHeightForDisplay) = photoWidthAndHeightForDisplay(imageWidthToAspectRatio,imageHeightToAspectRatio)
-
+    val (imageWidthToAspectRatio, imageHeightToAspectRatio) = drawingScreenViewModel.getBitmapSizeFromUri(context, mainViewModel.photoUri)
+    val (photoWidthForDisplay, photoHeightForDisplay) = photoWidthAndHeightForDisplay(imageWidthToAspectRatio, imageHeightToAspectRatio)
     val imageWidthPx = getScreenWidthPX()
     val imageHeightPx = imageWidthPx * imageHeightToAspectRatio / imageWidthToAspectRatio
+
+    var showStrokePicker by remember { mutableStateOf(false) }
+    var showEraserSizePicker by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f),//Geri tuşu sol üst
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(0.5f),
             verticalAlignment = Alignment.Top,
-            horizontalArrangement = Arrangement.Start)
-        {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.Start
-            ){
-                IconButton(
-                    onClick = {
-                        mainViewModel.goCameraScreenWithBack(context)
-                    },
-                    modifier = Modifier.padding(3.dp)
-                ) {
-                    Icon(Icons.Filled.ArrowBackIosNew, "Geri")
-                }
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            IconButton(
+                onClick = { mainViewModel.goCameraScreenWithBack(context) },
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Icon(Icons.Filled.ArrowBackIosNew, "Geri")
             }
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Top,
-                horizontalAlignment = Alignment.End
-            ){
-                IconButton(
-                    onClick = {
-                        drawingScreenViewModel.lines.clear()
-                        drawingScreenViewModel.redoStack.clear()
-                        drawingScreenViewModel.undoStack.clear()
-                    },
-                    modifier = Modifier.padding(3.dp)
-                ) {
-                    Icon(Icons.Filled.Delete, "Delete")
-                }
+
+            IconButton(
+                onClick = {
+                    drawingScreenViewModel.lines.clear()
+                },
+                modifier = Modifier.padding(3.dp)
+            ) {
+                Icon(Icons.Filled.Delete, "Delete")
             }
         }
 
         Row(
             modifier = Modifier
                 .width(photoWidthForDisplay)
-                .height(photoHeightForDisplay),
+                .height(photoHeightForDisplay)
+                .weight(5.25f),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
-                // Resmi göster
-                if (cameraViewViewModel.isCameraFront.value) {
-                    Image(
-                        painter = rememberImagePainter(mainViewModel.photoUri),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .graphicsLayer(
-                                scaleX = -1f,
-                                scaleY = 1f)
-                    )
-                }else if(!cameraViewViewModel.isCameraFront.value){
-                    Image(
-                        painter = rememberImagePainter(mainViewModel.photoUri),
-                        contentDescription = null,
-                    )
-                }
+            ) {
+                Image(
+                    painter = rememberImagePainter(mainViewModel.photoUri),
+                    contentDescription = null,
+                    modifier = Modifier.graphicsLayer(scaleX = if (cameraViewViewModel.isCameraFront.value) -1f else 1f, scaleY = 1f)
+                )
 
-
-
-                // Çizimlerin yapıldığı bölge
                 Canvas(
                     modifier = Modifier
                         .fillMaxSize()
-                        //.border(1.dp, Color.Magenta)
                         .pointerInput(true) {
-                            detectDragGestures { change, dragAmount ->
-                                change.consume()
-                                val line = Line(
-                                    start = change.position - dragAmount,
-                                    end = change.position,
-                                    color = drawingScreenViewModel.brushColor.value, // Kalem rengi
-                                    strokeWidth = drawingScreenViewModel.brushStroke.value // Kalem kalınlığı
-                                )
-                                lines.add(line)
-                                undoStack.push(line)
-                                redoStack.clear()
-                            }
+                            detectDragGestures(
+                                onDragStart = { offset ->
+                                    if (drawingScreenViewModel.drawingMode.value == DrawingMode.ERASE) {
+                                        drawingScreenViewModel.eraserPosition.value = offset
+                                    }
+                                },
+                                onDrag = { change, dragAmount ->
+                                    change.consume()
+                                    val canvasSize = size
+                                    if (change.position.x < 0f || change.position.x > canvasSize.width || change.position.y < 0f || change.position.y > canvasSize.height) {
+                                        // Çizim alanının dışına çıkıldı, çizimi durdur.
+                                        return@detectDragGestures
+                                    }
+                                    if (drawingScreenViewModel.drawingMode.value == DrawingMode.DRAW) {
+                                        val line = Line(
+                                            start = change.position - dragAmount,
+                                            end = change.position,
+                                            color = drawingScreenViewModel.brushColor.value,
+                                            strokeWidth = drawingScreenViewModel.brushStroke.value
+                                        )
+                                        lines.add(line)
+                                    } else if (drawingScreenViewModel.drawingMode.value == DrawingMode.ERASE) {
+                                        val touchPoint = change.position
+                                        val iterator = lines.iterator()
+                                        while (iterator.hasNext()) {
+                                            val line = iterator.next()
+                                            if (isPointNearLine(
+                                                    touchPoint,
+                                                    line.start,
+                                                    line.end,
+                                                    drawingScreenViewModel.eraserSize.value
+                                                )
+                                            ) {
+                                                iterator.remove()
+                                            }
+                                        }
+                                        drawingScreenViewModel.eraserPosition.value = touchPoint
+                                    }
+                                },
+                                onDragEnd = {
+                                    val canvasSize = size
+                                    lines.removeAll { line ->
+                                        line.start.x < 0f || line.start.x > canvasSize.width || line.start.y < 0f || line.start.y > canvasSize.height ||
+                                                line.end.x < 0f || line.end.x > canvasSize.width || line.end.y < 0f || line.end.y > canvasSize.height
+                                    }
+                                    drawingScreenViewModel.eraserPosition.value = null
+                                }
+                            )
                         }
                 ) {
                     lines.forEach { line ->
@@ -172,85 +161,222 @@ fun DrawingScreen() {
                             cap = StrokeCap.Round
                         )
                     }
+
+                    drawingScreenViewModel.eraserPosition.value?.let { eraserPos ->
+                        drawCircle(
+                            color = Color.Gray.copy(alpha = 0.5f),
+                            radius = drawingScreenViewModel.eraserSize.value,
+                            center = eraserPos
+                        )
+                    }
                 }
             }
         }
 
-
-        Row( // Whole Bottom Row
-            Modifier
-                .weight(2f),
-            horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.Bottom
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(2f)
+                .padding(8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Column( // Save to Galery Button / bottom left
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally) {
-                Button(
-                    onClick = {
-                        drawingScreenViewModel.isButtonEnabled.value = false
+                    .padding(2.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Row( // Color Picker
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                ) {
+                    drawingScreenViewModel.colorOptions.forEach { color ->
+                        Box(
+                            modifier = Modifier
+                                .padding(3.dp)
+                                .then(
+                                    if (drawingScreenViewModel.brushColor.value == color) {
+                                        Modifier.padding(5.dp).background(Color.LightGray, CircleShape)
+                                    } else {
+                                        Modifier
+                                    }
+                                )
+                        ) {
+                            IconButton(
+                                onClick = { drawingScreenViewModel.brushColor.value = color },
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .background(color, shape = CircleShape)
+                                        .border(1.dp, Color.DarkGray, CircleShape)
+                                )
+                            }
+                        }
+                    }
+                }
+                Row( // Bottom row / Save - pen etc.
+                    horizontalArrangement = Arrangement.SpaceEvenly,
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .weight(1f)
+                        .padding(2.dp)
+                ) {
 
-                        drawingScreenViewModel
-                            .saveImageWithDrawings(context,
+                    Box(
+                        modifier = Modifier
+                            .padding(6.dp) // Arkaplanı büyütmek için padding ekliyoruz
+                            .then(
+                                if (drawingScreenViewModel.drawingMode.value == DrawingMode.DRAW) {
+                                    Modifier.background(Color.LightGray, CircleShape)
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    ) {
+                        IconButton( // Pen Mode
+                            onClick = {
+                                drawingScreenViewModel.drawingMode.value = DrawingMode.DRAW
+                            }
+                        ) {
+                            Icon(Icons.Filled.DriveFileRenameOutline, "Kalem Modu", modifier = Modifier.size(32.dp))
+                        }
+                    }
+
+                    IconButton( // Stroke
+                        onClick = { showStrokePicker = true },
+                        modifier = Modifier.padding(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(drawingScreenViewModel.brushStroke.value.dp + 10.dp) // Icon boyutunu büyütüyoruz
+                                .background(
+                                    drawingScreenViewModel.brushColor.value,
+                                    shape = CircleShape
+                                )
+                        )
+                    }
+
+                    Button( // Save button
+                        onClick = {
+                            drawingScreenViewModel.saveImageWithDrawings(
+                                context,
                                 mainViewModel.photoUri,
                                 lines,
                                 imageWidthPx,
                                 imageHeightPx,
-                                cameraViewViewModel.isCameraFront.value)
-                    },
-                    enabled = drawingScreenViewModel.isButtonEnabled.value,
-                    colors = ButtonDefaults.buttonColors(Color.DarkGray),
-                    modifier = Modifier.padding(3.dp)
-                ) {
-                    Text(text = "Save", fontSize = 20.sp)
+                                cameraViewViewModel.isCameraFront.value,
+                                saveDrawings = true
+                            )
+                        },
+                        enabled = drawingScreenViewModel.isButtonEnabled.value,
+                        colors = ButtonDefaults.buttonColors(Color.DarkGray),
+                        modifier = Modifier.padding(6.dp)
+                    ) {
+                        Text(text = "Save", fontSize = 20.sp)
+                    }
+
+                    Box(
+                        modifier = Modifier
+                            .padding(6.dp) // Arkaplanı büyütmek için padding ekliyoruz
+                            .then(
+                                if (drawingScreenViewModel.drawingMode.value == DrawingMode.ERASE) {
+                                    Modifier.background(Color.LightGray, CircleShape)
+                                } else {
+                                    Modifier
+                                }
+                            )
+                    ) {
+                        IconButton( // Eraser Mode
+                            onClick = {
+                                drawingScreenViewModel.drawingMode.value = DrawingMode.ERASE
+                            }
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.rounded_ink_eraser_24),
+                                contentDescription = "Silgi Modu",
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                    }
+
+                    IconButton( // Eraser Size
+                        onClick = { showEraserSizePicker = true },
+                        modifier = Modifier.padding(6.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(drawingScreenViewModel.eraserSize.value.dp + 10.dp) // Icon boyutunu büyütüyoruz
+                                .background(Color.Gray, shape = CircleShape)
+                        )
+                    }
                 }
             }
-            Column( // Undo and Redo buttons / Bottom right
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
+        }
 
-                Row( // Row for Undo and Redo
-                    modifier = Modifier.fillMaxSize(),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+        if (showStrokePicker) {
+            StrokePickerDialog(
+                onStrokeSelected = { selectedStroke ->
+                    drawingScreenViewModel.brushStroke.value = selectedStroke
+                    showStrokePicker = false
+                },
+                onDismiss = { showStrokePicker = false }
+            )
+        }
+
+        if (showEraserSizePicker) {
+            StrokePickerDialog(
+                onStrokeSelected = { selectedEraserSize ->
+                    drawingScreenViewModel.eraserSize.value = selectedEraserSize
+                    showEraserSizePicker = false
+                },
+                onDismiss = { showEraserSizePicker = false }
+            )
+        }
+    }
+}
+
+fun isPointNearLine(point: androidx.compose.ui.geometry.Offset, start: androidx.compose.ui.geometry.Offset, end: androidx.compose.ui.geometry.Offset, radius: Float): Boolean {
+    val distanceToStart = hypot((point.x - start.x).toDouble(), (point.y - start.y).toDouble())
+    val distanceToEnd = hypot((point.x - end.x).toDouble(), (point.y - end.y).toDouble())
+    val lineLength = hypot((end.x - start.x).toDouble(), (end.y - start.y).toDouble())
+    return distanceToStart + distanceToEnd <= lineLength + radius
+}
+
+@Composable
+fun StrokePickerDialog(onStrokeSelected: (Float) -> Unit, onDismiss: () -> Unit) {
+    Dialog(onDismissRequest = onDismiss) {
+        Column(
+            modifier = Modifier
+                .background(Color.White, shape = RoundedCornerShape(8.dp))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            val strokes = listOf(4f, 8f, 16f, 32f, 64f)
+
+            Text("", style = MaterialTheme.typography.bodyLarge)
+
+            strokes.forEach { stroke ->
+                IconButton(
+                    onClick = {
+                        onStrokeSelected(stroke)
+                    },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(40.dp)  // Buton boyutu
                 ) {
-                    IconButton( // Undo button / Left
-                        onClick = {
-                            drawingScreenViewModel.undoLastDrawing()
-                            drawingScreenViewModel.undoLastDrawing()
-                            drawingScreenViewModel.undoLastDrawing()
-                        },
+                    Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .graphicsLayer(
-                                scaleX = 1f,
-                                scaleY = -1f  // Horizontal Flip
-                            )
-                    ) {
-                        Icon(Icons.Filled.SubdirectoryArrowLeft, "Undo Draw")
-                    }
-                    IconButton( // Undo button / Right
-                        onClick = {
-                            drawingScreenViewModel.redoLastDrawing()
-                            drawingScreenViewModel.redoLastDrawing()
-                            drawingScreenViewModel.redoLastDrawing()
-                        },
-                        modifier = Modifier
-                            .weight(1f)
-                            .graphicsLayer(
-                                scaleX = 1f,
-                                scaleY = -1f  // Horizontal Flip
-                            )
-                    ) {
-                        Icon(Icons.Filled.SubdirectoryArrowRight, "Redo Draw")
-                    }
+                            .size(stroke.dp)  // Çember boyutu kalem kalınlığına göre ayarlanır
+                            .background(Color.Gray, shape = CircleShape)
+                    )
                 }
             }
         }

@@ -12,8 +12,6 @@ The Draw Camera App is an innovative application designed for drawing on human f
 
 - **Customizable Brushes**: Customize your drawing experience with adjustable brush sizes, colors, and opacity settings.
 
-- **Undo and Redo**: Easily correct mistakes or experiment with different ideas using the undo and redo functionality.
-
 - **Save and Share**: Save your masterpieces directly to your device's gallery or share them with friends and family through social media platforms.
 
 - **Intuitive Interface**: The app features a user-friendly interface that makes it easy for users of all skill levels to dive in and start drawing.
@@ -49,7 +47,7 @@ Android app to take a picture, draw on it, and save the gallery, using Jetpack C
 - Taking a photo in Application <br>
 - Toggle the Camera as Front and Back camera <br>
 - Sketch on it freely, between image borders <br>
-- Undo & Redo actions <br>
+- Change the color easily <br>
 - Clear all sketch <br>
 - Saving the new image with sketch, to the gallery <br>
 
@@ -66,33 +64,12 @@ Android app to take a picture, draw on it, and save the gallery, using Jetpack C
 <br>
 
 ### Screenshots
-<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/ffdeeacd-e688-4d84-b0d5-25d40a2a42bc">
-<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/1a0063eb-c3fb-4360-b11a-c30999f335f8">
-<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/b200d7a2-9fce-4342-a2b3-b9df3fe98a97">
 
-### Taking Photo and Sketch
-
-
-https://github.com/mertgoksu/DrawCameraApp/assets/119433132/c30070a6-3050-43a6-91fd-a4ff87671ef2
+<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/16e0c9a4-f293-48ad-b9af-3be80739760c">
+<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/584bd387-758a-4f7b-b297-02dfbcb7ff93">
+<img width="250" alt="1" src="https://github.com/mertgoksu/DrawCameraApp/assets/119433132/80b6cd50-1dbb-402c-8db5-a30bd4bd5365">
 
 
-<br>
-
-### Undo & Redo on Sketch
-
-
-https://github.com/mertgoksu/DrawCameraApp/assets/119433132/11438b20-05df-4ab0-97bb-4e30279273e7
-
-
-<br>
-
-### Clear all Sketch
-
-
-https://github.com/mertgoksu/DrawCameraApp/assets/119433132/6c6157e5-48fc-450b-ba0d-7ebe0f91577f
-
-
-<br>
 
 
 
