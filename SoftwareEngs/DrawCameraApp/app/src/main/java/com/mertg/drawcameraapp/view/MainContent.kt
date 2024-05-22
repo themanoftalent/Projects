@@ -19,8 +19,8 @@ fun MainContent() {
     if (mainViewModel.showCamera.value) {
         cameraViewViewModel.isCameraFront.value = false
 
-        drawingScreenViewModel.redoStack.clear()
-        drawingScreenViewModel.undoStack.clear()
+//        drawingScreenViewModel.redoStack.clear()
+//        drawingScreenViewModel.undoStack.clear()
         drawingScreenViewModel.lines.clear()
 
         CameraView(

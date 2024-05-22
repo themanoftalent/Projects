@@ -9,7 +9,6 @@ import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.FlipCameraAndroid
@@ -32,7 +30,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
@@ -41,8 +38,6 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mertg.drawcameraapp.viewmodel.CameraViewViewModel
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.concurrent.Executor
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
@@ -151,20 +146,20 @@ fun CameraView(
                 horizontalAlignment = Alignment.Start
             ) {
                 IconButton(
-                   modifier = Modifier.size(35.dp),
-                   onClick = {
-                       if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
-                           cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-                           cameraViewViewModel.isCameraFront.value = true
-                       } else {
-                           cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                           cameraViewViewModel.isCameraFront.value = false
-                       }
-                   }) {
-                   Icon(Icons.Filled.FlipCameraAndroid,"Toggle Camera",
-                       modifier = Modifier
-                           .fillMaxSize()
-                           .padding(start = 3.dp))
+                    modifier = Modifier.size(35.dp),
+                    onClick = {
+                        if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                            cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                            cameraViewViewModel.isCameraFront.value = true
+                        } else {
+                            cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+                            cameraViewViewModel.isCameraFront.value = false
+                        }
+                    }) {
+                    Icon(Icons.Filled.FlipCameraAndroid,"Toggle Camera",
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 3.dp))
                 }
             }
         }

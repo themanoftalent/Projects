@@ -9,7 +9,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.mertg.drawcameraapp.MainActivity
 import com.mertg.drawcameraapp.R
-import com.mertg.drawcameraapp.util.getCurrentContext
 import java.io.File
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
